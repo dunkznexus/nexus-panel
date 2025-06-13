@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS Access Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0a0a0a;
+      color: #00f7ff;
+      font-family: 'JetBrains Mono', monospace;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    #intro, #dashboard {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .hidden {
+      display: none;
+    }
+    .glitch {
+      animation: glitch 1.5s infinite;
+    }
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 red; }
+      50% { text-shadow: -2px 0 blue; }
+      100% { text-shadow: 2px 0 red; }
+    }
+    .panel {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00f7ff33;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      background: #000;
+      color: #0f0;
+      font-family: monospace;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      resize: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="intro">
+    <h1 class="glitch">░▒▓█ NEXUS █▓▒░</h1>
+    <p>[Accessing secure layer... please wait]</p>
+  </div>
+
+  <div id="dashboard" class="hidden">
+    <h2>Welcome to NEXUS Panel</h2>
+    <div class="panel">
+      <h3>🧠 Upload Logs for Analysis</h3>
+      <input type="file" id="logUpload" accept="application/json">
+      <textarea id="logOutput" readonly placeholder="Upload a JSON log file..."></textarea>
+    </div>
+  </div>
+
+  <script>
+    const validKeys = ['GLX12-KNIGHT', 'ABC123-AGENT', 'NXS-01-ELITE'];
+    const params = new URLSearchParams(window.location.search);
+    const key = params.get('key');
+
+    function hasValidKey() {
+      return validKeys.includes(key);
+    }
+
+    window.onload = () => {
+      if (!hasValidKey()) {
+        document.body.innerHTML = '<h2 style="text-align:center;margin-top:40vh;color:red;">ACCESS DENIED</h2>';
+        return;
+      }
+      setTimeout(() => {
+        document.getElementById('intro').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+      }, 2000);
+
+      document.getElementById('logUpload').addEventListener('change', event => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            try {
+              const json = JSON.parse(e.target.result);
+              const output = json.logs.map(log => `[\${log.time}] \${log.message}`).join('\n');
+              document.getElementById('logOutput').value = output;
+            } catch (err) {
+              document.getElementById('logOutput').value = 'Invalid JSON format.';
+            }
+          };
+          reader.readAsText(file);
+        }
+      });
+    };
+  </script>
+</body>
+</html>
