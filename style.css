@@ -1,0 +1,13 @@
+body {
+  margin: 0; font-family: Arial, sans-serif; background: #0d1117; color: #fff;
+}
+#loginScreen, #dashboard {
+  padding: 20px; max-width: 800px; margin: auto; text-align: center;
+}
+input { padding: 10px; width: 300px; margin: 10px 0; }
+button { padding: 10px 20px; background: #238636; border: none; color: white; cursor: pointer; }
+header { display: flex; justify-content: space-between; align-items: center; }
+main { display: flex; gap: 20px; margin-top: 20px; }
+aside { width: 40%; background: #161b22; padding: 10px; border-radius: 8px; height: 400px; overflow-y: auto; }
+section { width: 60%; background: #161b22; padding: 10px; border-radius: 8px; }
+pre { text-align: left; white-space: pre-wrap; }
